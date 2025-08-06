@@ -6,25 +6,22 @@ An MCP server implementation that provides comprehensive 4-phase codebase analys
 
 The Codebase Navigator automatically analyzes any software project through a structured 4-phase approach, providing developers with comprehensive insights about code structure, dependencies, architectural patterns, and onboarding recommendations.
 
+
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-  - [Multi-Language Support](#multi-language-support)
-  - [Comprehensive Analysis](#comprehensive-analysis)
-  - [Rich Reporting](#rich-reporting)
-  - [Example Output](#example-output)
-- [Architecture](#architecture)
-  - [Key Components](#key-components)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Architecture](#-architecture)
 - [Analysis Phases](#analysis-phases)
-- [Language Support](#language-support)
+- [Example output](#example-output)
+- [Language Support](#-language-support)
 - [Tool](#tool)
-  - [analyze_codebase](#analyze_codebase)
 - [Usage](#usage)
 - [Configuration](#configuration)
   - [Usage with Claude Desktop](#usage-with-claude-desktop)
   - [Usage with VS Code](#usage-with-vs-code)
 - [License](#license)
+
 
 ## ✨ Features
 
@@ -45,31 +42,6 @@ The Codebase Navigator automatically analyzes any software project through a str
 - **Detailed Metrics**: Lines of code, file breakdowns, dependency analysis
 - **Visual Structure**: Directory tree and file organization insights
 
-> **Note**
->
-> Example output may differ based on the LLM model invoking the tool and the level of granularity requested by the developer.
-
-
-```
-📊 COMPREHENSIVE CODEBASE ANALYSIS REPORT
-
-Project: my-app
-Analysis Date: 2025-08-06
-Total Phases Completed: 4
-
-🎯 EXECUTIVE SUMMARY
-Project Type: Node.js/TypeScript Application
-Documentation Quality: Well Documented ✅
-Code Organization: Well Organized ✅
-Complexity Level: Medium (Moderate Dependencies) 🟡
-
-🚀 DEVELOPER ONBOARDING GUIDE
-- [x] Clone the repository
-- [x] Run `npm install` to install dependencies
-- [x] Check `package.json` for available scripts
-- [x] Start by examining the main entry points identified
-```
-
 ## 🏗 Architecture
 
 The codebase is organized into focused, testable modules:
@@ -86,6 +58,7 @@ src/codebase_navigator/
     └── reportGenerator.ts # Report formatting & generation
 ```
 
+
 ### Key Components
 
 - **File System Utils**: Auto-detect project roots, find source files, locate documentation
@@ -93,7 +66,7 @@ src/codebase_navigator/
 - **Report Generator**: Format findings, generate comprehensive reports, create onboarding guides
 - **Server Orchestrator**: Coordinate analysis phases, manage state, handle MCP protocol
 
-## 🎯 Analysis Phases
+## Analysis Phases
 
 ### Phase 1: Conceptual Understanding
 - Identifies key documentation files (README, ARCHITECTURE, etc.)
@@ -116,6 +89,35 @@ src/codebase_navigator/
 - Provides developer onboarding recommendations
 - Summarizes key findings and next steps
 - Generates comprehensive final report
+
+
+
+## Example output
+
+> [!TIP]
+> Example output may differ based on the LLM model invoking the tool and the level of granularity requested by the developer.
+
+```
+📊 COMPREHENSIVE CODEBASE ANALYSIS REPORT
+
+Project: my-app
+Analysis Date: 2025-08-06
+Total Phases Completed: 4
+
+🎯 EXECUTIVE SUMMARY
+Project Type: Node.js/TypeScript Application
+Documentation Quality: Well Documented ✅
+Code Organization: Well Organized ✅
+Complexity Level: Medium (Moderate Dependencies) 🟡
+
+🚀 DEVELOPER ONBOARDING GUIDE
+- [x] Clone the repository
+- [x] Run `npm install` to install dependencies
+- [x] Check `package.json` for available scripts
+- [x] Start by examining the main entry points identified
+```
+---
+
 
 ## 🌍 Language Support
 
