@@ -127,6 +127,7 @@ export class CodebaseNavigatorServer {
       // Run all phases sequentially for comprehensive analysis
       const allPhases = ['conceptual', 'structural', 'analysis', 'synthesis'];
       let comprehensiveReport = '';
+      let keyDocs: string[] = []; // Declare keyDocs outside the loop
       
       console.error(chalk.blue('🚀 Starting comprehensive codebase analysis...'));
       
@@ -137,7 +138,7 @@ export class CodebaseNavigatorServer {
         
         switch (phase) {
           case 'conceptual':
-            const keyDocs = await findKeyDocs(projectPath);
+            keyDocs = await findKeyDocs(projectPath); // Assign to the outer variable
             phaseFindings = await processPhase1(projectPath, keyDocs);
             break;
 
@@ -174,7 +175,7 @@ export class CodebaseNavigatorServer {
       }
 
       // Generate final comprehensive report
-      const finalReport = await generateComprehensiveReport(projectPath, comprehensiveReport, this.analysisHistory);
+      const finalReport = await generateComprehensiveReport(projectPath, comprehensiveReport, this.analysisHistory, keyDocs);
       
       console.error(chalk.green('✅ Comprehensive analysis complete!'));
 

@@ -20,6 +20,7 @@ export async function findKeyDocs(projectPath: string): Promise<string[]> {
   ];
 
   const keyDocs: string[] = [];
+  const otherMdFiles: string[] = [];
   
   try {
     const scanDir = (dir: string, depth: number = 0): void => {
@@ -35,6 +36,9 @@ export async function findKeyDocs(projectPath: string): Promise<string[]> {
         } else if (stat.isFile() && item.endsWith('.md')) {
           if (keyPatterns.some(pattern => pattern.test(item))) {
             keyDocs.push(itemPath);
+          } else {
+            // Collect all other .md files
+            otherMdFiles.push(itemPath);
           }
         }
       }
@@ -45,7 +49,8 @@ export async function findKeyDocs(projectPath: string): Promise<string[]> {
     // Handle error silently
   }
   
-  return keyDocs;
+  // Return key documents first, then other markdown files
+  return [...keyDocs, ...otherMdFiles];
 }
 
 export async function findRepositoryRoot(startPath: string): Promise<string> {
