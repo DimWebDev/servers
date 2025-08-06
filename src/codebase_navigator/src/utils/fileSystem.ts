@@ -99,7 +99,28 @@ export async function getProjectStructure(projectPath: string): Promise<string> 
 
 export function findCodeFiles(projectPath: string): string[] {
   const codeFiles: string[] = [];
-  const extensions = ['.ts', '.js', '.py', '.java', '.cpp', '.c', '.go', '.rs'];
+  const extensions = [
+    // Web Technologies
+    '.ts', '.js', '.tsx', '.jsx', '.vue', '.svelte',
+    
+    // Backend Languages
+    '.py', '.java', '.go', '.rs', '.cpp', '.c', '.cs', '.php', '.rb',
+    
+    // Mobile
+    '.swift', '.kt', '.dart',
+    
+    // Functional Languages
+    '.hs', '.elm', '.clj', '.ml', '.fs',
+    
+    // Data & Config
+    '.sql', '.json', '.yaml', '.yml', '.toml', '.xml',
+    
+    // Shell & Scripts
+    '.sh', '.bash', '.ps1', '.bat',
+    
+    // Headers
+    '.h', '.hpp', '.hxx'
+  ];
   
   const walkDir = (dir: string, depth: number = 0): void => {
     if (depth > 4) return; // Limit depth
@@ -110,7 +131,11 @@ export function findCodeFiles(projectPath: string): string[] {
         const itemPath = path.join(dir, item);
         const stat = fs.statSync(itemPath);
         
-        if (stat.isDirectory() && !['node_modules', '.git', 'dist', 'build', '__pycache__'].includes(item)) {
+        if (stat.isDirectory() && ![
+          'node_modules', '.git', 'dist', 'build', '__pycache__', 
+          'target', 'bin', 'obj', '.vscode', '.idea', 
+          'vendor', '.gradle', '.maven', 'cmake-build-debug'
+        ].includes(item)) {
           walkDir(itemPath, depth + 1);
         } else if (stat.isFile() && extensions.some(ext => item.endsWith(ext))) {
           codeFiles.push(itemPath);

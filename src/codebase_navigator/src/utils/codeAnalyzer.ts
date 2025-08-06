@@ -7,6 +7,8 @@ export function extractImports(content: string, extension: string): string[] {
   switch (extension) {
     case '.js':
     case '.ts':
+    case '.tsx':
+    case '.jsx':
       // ES6 imports and require statements
       const importMatches = content.match(/import\s+.*?\s+from\s+['"`]([^'"`]+)['"`]/g) || [];
       const requireMatches = content.match(/require\(['"`]([^'"`]+)['"`]\)/g) || [];
@@ -29,6 +31,69 @@ export function extractImports(content: string, extension: string): string[] {
         if (moduleMatch) imports.push(moduleMatch[1] || moduleMatch[2]);
       });
       break;
+      
+    case '.java':
+      const javaImports = content.match(/import\s+(static\s+)?([a-zA-Z_][a-zA-Z0-9_]*(?:\.[a-zA-Z_][a-zA-Z0-9_]*)*(?:\.\*)?)\s*;/g) || [];
+      javaImports.forEach(match => {
+        const moduleMatch = match.match(/import\s+(?:static\s+)?([a-zA-Z_][a-zA-Z0-9_]*(?:\.[a-zA-Z_][a-zA-Z0-9_]*)*)/);
+        if (moduleMatch) imports.push(moduleMatch[1]);
+      });
+      break;
+      
+    case '.go':
+      const goImports = content.match(/import\s+(?:\(\s*([^)]+)\s*\)|"([^"]+)")/g) || [];
+      goImports.forEach(match => {
+        if (match.includes('(')) {
+          // Multi-line imports
+          const multiImports = match.match(/"([^"]+)"/g) || [];
+          multiImports.forEach(imp => {
+            const cleaned = imp.replace(/"/g, '');
+            if (cleaned) imports.push(cleaned);
+          });
+        } else {
+          // Single import
+          const moduleMatch = match.match(/"([^"]+)"/);
+          if (moduleMatch) imports.push(moduleMatch[1]);
+        }
+      });
+      break;
+      
+    case '.rs':
+      const rustImports = content.match(/use\s+([a-zA-Z_][a-zA-Z0-9_]*(?:::[a-zA-Z_][a-zA-Z0-9_]*)*(?:::(?:\{[^}]+\}|\*|[a-zA-Z_][a-zA-Z0-9_]*))?)(?:\s+as\s+[a-zA-Z_][a-zA-Z0-9_]*)?;/g) || [];
+      rustImports.forEach(match => {
+        const moduleMatch = match.match(/use\s+([a-zA-Z_][a-zA-Z0-9_]*(?:::[a-zA-Z_][a-zA-Z0-9_]*)*)/);
+        if (moduleMatch) imports.push(moduleMatch[1]);
+      });
+      break;
+      
+    case '.cpp':
+    case '.c':
+    case '.h':
+    case '.hpp':
+      const cppImports = content.match(/#include\s*[<"]([^>"]+)[>"]/g) || [];
+      cppImports.forEach(match => {
+        const moduleMatch = match.match(/#include\s*[<"]([^>"]+)[>"]/);
+        if (moduleMatch) imports.push(moduleMatch[1]);
+      });
+      break;
+      
+    case '.php':
+      const phpImports = content.match(/(?:require|include)(?:_once)?\s*\(?['"]([^'"]+)['"]|use\s+([a-zA-Z_\\][a-zA-Z0-9_\\]*)/g) || [];
+      phpImports.forEach(match => {
+        const requireMatch = match.match(/(?:require|include)(?:_once)?\s*\(?['"]([^'"]+)['"]/);
+        const useMatch = match.match(/use\s+([a-zA-Z_\\][a-zA-Z0-9_\\]*)/);
+        if (requireMatch) imports.push(requireMatch[1]);
+        if (useMatch) imports.push(useMatch[1]);
+      });
+      break;
+      
+    case '.rb':
+      const rubyImports = content.match(/require\s*['"]([^'"]+)['"]|require_relative\s*['"]([^'"]+)['"]/g) || [];
+      rubyImports.forEach(match => {
+        const moduleMatch = match.match(/require(?:_relative)?\s*['"]([^'"]+)['"]/);
+        if (moduleMatch) imports.push(moduleMatch[1]);
+      });
+      break;
   }
   
   return imports.filter(imp => imp && !imp.startsWith('.'));
@@ -36,15 +101,40 @@ export function extractImports(content: string, extension: string): string[] {
 
 export function isEntryPoint(content: string, filePath: string): boolean {
   const entryPatterns = [
+    // JavaScript/TypeScript/Node.js
     /main\s*\(/,
-    /if\s+__name__\s*==\s*['"]__main__['"]/,
     /express\(\)/,
     /createApp\(/,
     /ReactDOM\.render/,
-    /new\s+Server\(/
+    /new\s+Server\(/,
+    
+    // Python
+    /if\s+__name__\s*==\s*['"]__main__['"]/,
+    
+    // Java
+    /public\s+static\s+void\s+main\s*\(/,
+    
+    // C/C++
+    /int\s+main\s*\(/,
+    /void\s+main\s*\(/,
+    
+    // Go
+    /func\s+main\s*\(\s*\)/,
+    
+    // Rust
+    /fn\s+main\s*\(\s*\)/,
+    
+    // C#
+    /static\s+void\s+Main\s*\(/,
+    
+    // PHP
+    /namespace\s+|<\?php/,
+    
+    // Ruby
+    /if\s+__FILE__\s*==\s*\$0/
   ];
   
-  const isMainFile = ['index', 'main', 'app', 'server'].some(name => 
+  const isMainFile = ['index', 'main', 'app', 'server', 'program'].some(name => 
     filePath.toLowerCase().includes(name)
   );
   
@@ -56,15 +146,48 @@ export function isEntryPoint(content: string, filePath: string): boolean {
 export function detectPatterns(content: string, filePath: string): string[] {
   const patterns: string[] = [];
   
-  // Detect common patterns
-  if (/class\s+\w+.*{/.test(content)) patterns.push('OOP/Classes');
-  if (/function\s+\w+|const\s+\w+\s*=.*=>/.test(content)) patterns.push('Functions');
-  if (/export\s+(default\s+)?/.test(content)) patterns.push('ES6 Modules');
-  if (/\.then\(|async\s+|await\s+/.test(content)) patterns.push('Async/Promises');
-  if (/React\.|useState|useEffect/.test(content)) patterns.push('React');
-  if (/express\(\)|app\.get|app\.post/.test(content)) patterns.push('Express.js');
-  if (/SELECT|INSERT|UPDATE|DELETE/i.test(content)) patterns.push('SQL/Database');
-  if (/test\(|describe\(|it\(/.test(content)) patterns.push('Testing');
+  // Universal patterns
+  if (/class\s+\w+|struct\s+\w+|interface\s+\w+/i.test(content)) patterns.push('OOP/Classes');
+  if (/function\s+\w+|def\s+\w+|fn\s+\w+|func\s+\w+|const\s+\w+\s*=.*=>|\w+\s*\(/i.test(content)) patterns.push('Functions');
+  if (/\.then\(|async\s+|await\s+|Promise|Future|Task/i.test(content)) patterns.push('Async/Promises');
+  if (/try\s*{|\btry:\s*$|catch\s*\(|except\s*:/m.test(content)) patterns.push('Error Handling');
+  if (/test\s*\(|describe\s*\(|it\s*\(|@Test|unittest|pytest/i.test(content)) patterns.push('Testing');
+  
+  // Language-specific patterns
+  // JavaScript/TypeScript
+  if (/export\s+(default\s+)?|module\.exports/i.test(content)) patterns.push('ES6 Modules');
+  if (/React\.|useState|useEffect|Component/i.test(content)) patterns.push('React');
+  if (/express\(\)|app\.get|app\.post|router\./i.test(content)) patterns.push('Express.js/Web Server');
+  
+  // Database/SQL
+  if (/SELECT|INSERT|UPDATE|DELETE|CREATE TABLE|ALTER TABLE/i.test(content)) patterns.push('SQL/Database');
+  if (/mongoose\.|sequelize\.|prisma\.|TypeORM|Hibernate/i.test(content)) patterns.push('ORM');
+  
+  // Python
+  if (/__init__\.py|if\s+__name__\s*==|import\s+\w+|from\s+\w+/i.test(content)) patterns.push('Python Modules');
+  if (/django|flask|fastapi|@app\.|@router\./i.test(content)) patterns.push('Python Web Framework');
+  if (/numpy|pandas|matplotlib|sklearn|tensorflow|pytorch/i.test(content)) patterns.push('Data Science/ML');
+  
+  // Java
+  if (/package\s+\w+|import\s+java\.|@Override|@Component/i.test(content)) patterns.push('Java/JVM');
+  if (/Spring|@Autowired|@Service|@Repository|@Controller/i.test(content)) patterns.push('Spring Framework');
+  if (/JUnit|@Test|Mockito/i.test(content)) patterns.push('Java Testing');
+  
+  // Go
+  if (/package\s+\w+|import\s+\(|func\s+\w+|go\s+func|chan\s+/i.test(content)) patterns.push('Go Language');
+  if (/gorilla\/mux|gin\.|echo\.|http\.Handle/i.test(content)) patterns.push('Go Web Server');
+  
+  // Rust
+  if (/use\s+\w+|mod\s+\w+|impl\s+\w+|#\[derive|cargo/i.test(content)) patterns.push('Rust Language');
+  if (/actix|warp|rocket|axum/i.test(content)) patterns.push('Rust Web Framework');
+  
+  // C/C++
+  if (/#include|#define|#ifndef|std::|using namespace/i.test(content)) patterns.push('C/C++');
+  if (/iostream|vector|string|map|set|algorithm/i.test(content)) patterns.push('C++ STL');
+  
+  // DevOps/Infrastructure
+  if (/docker|dockerfile|kubernetes|helm|terraform/i.test(content)) patterns.push('DevOps/Infrastructure');
+  if (/\.yml|\.yaml|ansible|pipeline/i.test(filePath.toLowerCase())) patterns.push('Configuration as Code');
   
   return patterns;
 }
