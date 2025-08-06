@@ -1,5 +1,5 @@
 {
-  "name": "@dimwebdev/code_navigator",
+  "name": "@dimwebdev/codebase_navigator",
   "version": "0.1.0",
   "description": "MCP server for comprehensive codebase analysis and navigation",
   "license": "MIT",

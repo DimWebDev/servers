@@ -1,3 +1,6 @@
+
+# NOTE: This Dockerfile is for local builds only. The image is NOT published to any public Docker registry.
+# You can use this Dockerfile to build and run the server locally if you wish.
 FROM node:22.12-alpine AS builder
 
 COPY src/codebase_navigator /app

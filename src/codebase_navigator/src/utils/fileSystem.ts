@@ -23,7 +23,7 @@ export async function findKeyDocs(projectPath: string): Promise<string[]> {
   
   try {
     const scanDir = (dir: string, depth: number = 0): void => {
-      if (depth > 2) return; // Limit depth
+      if (depth > 10) return; // Increased depth to 10 for very deep nested package structures
       
       const items = fs.readdirSync(dir);
       for (const item of items) {
@@ -89,7 +89,7 @@ export async function findRepositoryRoot(startPath: string): Promise<string> {
 export async function getProjectStructure(projectPath: string): Promise<string> {
   try {
     const { stdout } = await execAsync(
-      `cd "${projectPath}" && tree -I 'node_modules|__pycache__|dist|build|.git' -L 3 || find . -type f -name "*.ts" -o -name "*.js" -o -name "*.py" -o -name "*.java" | head -20`
+      `cd "${projectPath}" && tree -I 'node_modules|__pycache__|dist|build|.git' -L 10 || find . -type f -name "*.ts" -o -name "*.js" -o -name "*.py" -o -name "*.java" | head -20`
     );
     return stdout;
   } catch (error) {
@@ -123,7 +123,7 @@ export function findCodeFiles(projectPath: string): string[] {
   ];
   
   const walkDir = (dir: string, depth: number = 0): void => {
-    if (depth > 4) return; // Limit depth
+    if (depth > 10) return; // Increased depth to 10 for very deep package structures like Java/Python
     
     try {
       const items = fs.readdirSync(dir);

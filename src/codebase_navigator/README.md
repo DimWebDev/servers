@@ -2,15 +2,136 @@
 
 An MCP server implementation that provides comprehensive 4-phase codebase analysis and navigation for developers joining new projects.
 
-## Features
+## 🚀 Overview
 
-- **Phase 1: Conceptual Understanding** - Extract and analyze key documentation files
-- **Phase 2: Structural Scaffolding** - Map the physical codebase layout and organization
-- **Phase 3: In-Depth Code Analysis** - Analyze dependencies, relationships, and patterns
-- **Phase 4: Synthesis and Reporting** - Generate structured insights for new developers
-- Systematic approach to understanding unfamiliar codebases
-- Cross-language support for multiple programming environments
-- Intelligent document discovery and analysis
+The Codebase Navigator automatically analyzes any software project through a structured 4-phase approach, providing developers with comprehensive insights about code structure, dependencies, architectural patterns, and onboarding recommendations.
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+  - [Multi-Language Support](#multi-language-support)
+  - [Comprehensive Analysis](#comprehensive-analysis)
+  - [Rich Reporting](#rich-reporting)
+  - [Example Output](#example-output)
+- [Architecture](#architecture)
+  - [Key Components](#key-components)
+- [Analysis Phases](#analysis-phases)
+- [Language Support](#language-support)
+- [Tool](#tool)
+  - [analyze_codebase](#analyze_codebase)
+- [Usage](#usage)
+- [Configuration](#configuration)
+  - [Usage with Claude Desktop](#usage-with-claude-desktop)
+  - [Usage with VS Code](#usage-with-vs-code)
+- [License](#license)
+
+## ✨ Features
+
+### 🔍 **Multi-Language Support**
+- **25+ Programming Languages**: JavaScript, TypeScript, Python, Java, Go, Rust, C/C++, PHP, Ruby, Swift, Kotlin, and more
+- **Smart Import Parsing**: Understands language-specific import/dependency syntax
+- **Framework Detection**: Recognizes popular frameworks (React, Express, Django, Spring, etc.)
+
+### 📊 **Comprehensive Analysis**
+- **4-Phase Analysis**: Conceptual → Structural → Code Analysis → Synthesis
+- **Auto-Root Detection**: Automatically finds project root from any nested directory
+- **Architecture Patterns**: Identifies MVC, Repository, Service Layer, and other patterns
+- **Entry Point Detection**: Locates main application entry points across languages
+
+### 📋 **Rich Reporting**
+- **Executive Summary**: Project health indicators and complexity assessment
+- **Developer Onboarding**: Quick start checklist and recommendations
+- **Detailed Metrics**: Lines of code, file breakdowns, dependency analysis
+- **Visual Structure**: Directory tree and file organization insights
+
+### Example Output
+
+```
+📊 COMPREHENSIVE CODEBASE ANALYSIS REPORT
+
+Project: my-app
+Analysis Date: 2025-08-06
+Total Phases Completed: 4
+
+🎯 EXECUTIVE SUMMARY
+Project Type: Node.js/TypeScript Application
+Documentation Quality: Well Documented ✅
+Code Organization: Well Organized ✅
+Complexity Level: Medium (Moderate Dependencies) 🟡
+
+🚀 DEVELOPER ONBOARDING GUIDE
+- [x] Clone the repository
+- [x] Run `npm install` to install dependencies
+- [x] Check `package.json` for available scripts
+- [x] Start by examining the main entry points identified
+```
+
+## 🏗 Architecture
+
+The codebase is organized into focused, testable modules:
+
+```
+src/codebase_navigator/
+├── index.ts              # MCP server entry point
+├── server.ts             # Main orchestration logic
+├── types/
+│   └── index.ts          # Shared TypeScript interfaces
+└── utils/
+    ├── fileSystem.ts     # File operations & repository detection
+    ├── codeAnalyzer.ts   # Code parsing & pattern detection
+    └── reportGenerator.ts # Report formatting & generation
+```
+
+### Key Components
+
+- **File System Utils**: Auto-detect project roots, find source files, locate documentation
+- **Code Analyzer**: Parse imports, detect patterns, extract functions/classes, analyze architecture
+- **Report Generator**: Format findings, generate comprehensive reports, create onboarding guides
+- **Server Orchestrator**: Coordinate analysis phases, manage state, handle MCP protocol
+
+## 🎯 Analysis Phases
+
+### Phase 1: Conceptual Understanding
+- Identifies key documentation files (README, ARCHITECTURE, etc.)
+- Extracts project goals and requirements
+- Builds foundational understanding of project purpose
+
+### Phase 2: Structural Scaffolding
+- Maps physical layout and organization
+- Provides directory tree view
+- Identifies structural patterns and conventions
+
+### Phase 3: In-Depth Code Analysis
+- Analyzes dependencies and module relationships
+- Identifies entry points and data flow
+- Detects architectural and programming patterns
+- Maps component interactions
+
+### Phase 4: Synthesis and Reporting
+- Combines insights into actionable intelligence
+- Provides developer onboarding recommendations
+- Summarizes key findings and next steps
+- Generates comprehensive final report
+
+## 🌍 Language Support
+
+### Fully Supported (Import Parsing + Patterns)
+- JavaScript/TypeScript (.js, .ts, .tsx, .jsx)
+- Python (.py)
+- Java (.java)
+- Go (.go)
+- Rust (.rs)
+- C/C++ (.c, .cpp, .h, .hpp)
+- PHP (.php)
+- Ruby (.rb)
+
+### Additional File Types Recognized
+- Mobile: Swift, Kotlin, Dart
+- Functional: Haskell, Elm, Clojure
+- Data: SQL, JSON, YAML, TOML, XML
+- Scripts: Shell, PowerShell, Batch
+
 
 ## Tool
 
@@ -20,7 +141,7 @@ Facilitates comprehensive 4-phase codebase analysis for systematic project under
 
 **Inputs:**
 - `projectPath` (string): Absolute path to the project root directory to analyze
-- `phase` (string, optional): Analysis phase to execute - `conceptual`, `structural`, `analysis`, or `synthesis` (defaults to 'conceptual')
+- `phase` (string, optional): Analysis phase to execute - `conceptual`, `structural`, `analysis`, `synthesis`, or `all` (defaults to 'all' for complete analysis)
 
 **Phases:**
 1. **Conceptual Understanding**: Identifies key documentation (README, ARCHITECTURE, etc.) and extracts project context
@@ -53,30 +174,13 @@ Add this to your `claude_desktop_config.json`:
       "command": "npx",
       "args": [
         "-y",
-        "@dimwebdev/code_navigator"
+        "@dimwebdev/codebase_navigator"
       ]
     }
   }
 }
 ```
 
-#### docker
-
-```json
-{
-  "mcpServers": {
-    "codebase-navigator": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "mcp/codebase-navigator"
-      ]
-    }
-  }
-}
-```
 
 To disable logging of analysis information set env var: `DISABLE_ANALYSIS_LOGGING` to `true`.
 
@@ -101,7 +205,7 @@ For NPX installation:
         "command": "npx",
         "args": [
           "-y",
-          "@dimwebdev/code_navigator"
+          "@dimwebdev/codebase_navigator"
         ]
       }
     }
@@ -109,54 +213,6 @@ For NPX installation:
 }
 ```
 
-For Docker installation:
-
-```json
-{
-  "mcp": {
-    "servers": {
-      "codebase-navigator": {
-        "command": "docker",
-        "args": [
-          "run",
-          "--rm",
-          "-i",
-          "mcp/codebase-navigator"
-        ]
-      }
-    }
-  }
-}
-```
-
-## Example Usage
-
-To analyze a project, call the tool with the project path:
-
-```json
-// Start with Phase 1: Conceptual Understanding
-{
-  "analyze_codebase": {
-    "projectPath": "/path/to/your/project",
-    "phase": "conceptual"
-  }
-}
-
-// Then proceed through the remaining phases
-// Phase 2: structural
-// Phase 3: analysis  
-// Phase 4: synthesis
-```
-
-The tool will guide you through each phase systematically, building comprehensive understanding of the codebase.
-
-## Building
-
-Docker:
-
-```bash
-docker build -t mcp/codebase-navigator -f src/code_navigator/Dockerfile .
-```
 
 ## License
 
