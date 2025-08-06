@@ -109,22 +109,22 @@ export async function processPhase3(projectPath: string, codeAnalysis: CodeAnaly
     
     if (externalDeps.length > 0) {
       analysis += "**External Dependencies:**\n";
-      externalDeps.slice(0, 10).forEach((dep: string) => {
+      externalDeps.slice(0, 30).forEach((dep: string) => {
         analysis += `- ${dep}\n`;
       });
-      if (externalDeps.length > 10) {
-        analysis += `- ... and ${externalDeps.length - 10} more\n`;
+      if (externalDeps.length > 30) {
+        analysis += `- ... and ${externalDeps.length - 30} more\n`;
       }
       analysis += "\n";
     }
     
     if (internalDeps.length > 0) {
       analysis += "**Internal Module Imports:**\n";
-      internalDeps.slice(0, 8).forEach((dep: string) => {
+      internalDeps.slice(0, 30).forEach((dep: string) => {
         analysis += `- ${dep}\n`;
       });
-      if (internalDeps.length > 8) {
-        analysis += `- ... and ${internalDeps.length - 8} more\n`;
+      if (internalDeps.length > 30) {
+        analysis += `- ... and ${internalDeps.length - 30} more\n`;
       }
       analysis += "\n";
     }
@@ -151,19 +151,19 @@ export async function processPhase3(projectPath: string, codeAnalysis: CodeAnaly
     
     if (functions.length > 0) {
       analysis += `**Functions (${functions.length}):**\n`;
-      functions.slice(0, 8).forEach((func: any) => {
+      functions.slice(0, 30).forEach((func: any) => {
         analysis += `- **${func.name}**${func.file ? ` (${func.file})` : ''}${func.isAsync ? ' [async]' : ''}\n`;
       });
-      if (functions.length > 8) analysis += `- ... and ${functions.length - 8} more functions\n`;
+      if (functions.length > 30) analysis += `- ... and ${functions.length - 30} more functions\n`;
       analysis += "\n";
     }
     
     if (classes.length > 0) {
       analysis += `**Classes (${classes.length}):**\n`;
-      classes.slice(0, 5).forEach((cls: any) => {
+      classes.slice(0, 30).forEach((cls: any) => {
         analysis += `- **${cls.name}**${cls.file ? ` (${cls.file})` : ''}\n`;
       });
-      if (classes.length > 5) analysis += `- ... and ${classes.length - 5} more classes\n`;
+      if (classes.length > 30) analysis += `- ... and ${classes.length - 30} more classes\n`;
       analysis += "\n";
     }
   } else {
