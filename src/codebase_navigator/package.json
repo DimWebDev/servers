@@ -4,11 +4,10 @@
   "description": "MCP server for comprehensive codebase analysis and navigation",
   "license": "MIT",
   "author": "DimWebDev",
-  "homepage": "https://github.com/DimWebDev/codebase-navigator-mcp",
-  "bugs": "https://github.com/DimWebDev/codebase-navigator-mcp/issues",
+  "homepage": "https://github.com/DimWebDev/servers/tree/main/src/codebase_navigator",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DimWebDev/codebase-navigator-mcp.git"
+    "url": "https://github.com/DimWebDev/servers"
   },
   "type": "module",
   "bin": {
