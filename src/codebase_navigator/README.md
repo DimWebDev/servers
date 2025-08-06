@@ -29,8 +29,8 @@ The Codebase Navigator automatically analyzes any software project through a str
 ## ✨ Features
 
 ### 🔍 **Multi-Language Support**
-- **25+ Programming Languages**: JavaScript, TypeScript, Python, Java, Go, Rust, C/C++, PHP, Ruby, Swift, Kotlin, and more
-- **Smart Import Parsing**: Understands language-specific import/dependency syntax
+- **Multiple Programming Languages**: Comprehensive file recognition across multiple language ecosystems
+- **Smart Import Parsing**: Deep import/dependency analysis for 8 core languages
 - **Framework Detection**: Recognizes popular frameworks (React, Express, Django, Spring, etc.)
 
 ### 📊 **Comprehensive Analysis**
@@ -45,7 +45,10 @@ The Codebase Navigator automatically analyzes any software project through a str
 - **Detailed Metrics**: Lines of code, file breakdowns, dependency analysis
 - **Visual Structure**: Directory tree and file organization insights
 
-### Example Output
+> **Note**
+>
+> Example output may differ based on the LLM model invoking the tool and the level of granularity requested by the developer.
+
 
 ```
 📊 COMPREHENSIVE CODEBASE ANALYSIS REPORT
@@ -116,7 +119,7 @@ src/codebase_navigator/
 
 ## 🌍 Language Support
 
-### Fully Supported (Import Parsing + Patterns)
+### Fully Supported (Import Parsing + Pattern Detection)
 - JavaScript/TypeScript (.js, .ts, .tsx, .jsx)
 - Python (.py)
 - Java (.java)
@@ -126,11 +129,14 @@ src/codebase_navigator/
 - PHP (.php)
 - Ruby (.rb)
 
-### Additional File Types Recognized
-- Mobile: Swift, Kotlin, Dart
-- Functional: Haskell, Elm, Clojure
-- Data: SQL, JSON, YAML, TOML, XML
-- Scripts: Shell, PowerShell, Batch
+### File Recognition + Basic Analysis
+- Mobile: Swift (.swift), Kotlin (.kt), Dart (.dart)
+- Functional: Haskell (.hs), Elm (.elm), Clojure (.clj), F# (.fs), ML (.ml)
+- Systems: C# (.cs) - includes entry point detection
+- Web: Vue (.vue), Svelte (.svelte)
+- Data: SQL (.sql), JSON (.json), YAML (.yaml/.yml), TOML (.toml), XML (.xml)
+- Scripts: Shell (.sh/.bash), PowerShell (.ps1), Batch (.bat)
+- Headers: C/C++ headers (.h, .hpp, .hxx)
 
 
 ## Tool
