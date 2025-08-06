@@ -168,6 +168,7 @@ The Codebase Navigator tool is designed for:
 - Identifying entry points and key components
 - Extracting insights from project documentation
 - Getting oriented in complex software systems
+- Help AI Assistants understand your codebase faster
 
 ## Configuration
 
