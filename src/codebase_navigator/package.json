@@ -1,0 +1,34 @@
+{
+  "name": "@dimwebdev/code_navigator",
+  "version": "0.1.0",
+  "description": "MCP server for comprehensive codebase analysis and navigation",
+  "license": "MIT",
+  "author": "DimWebDev",
+  "homepage": "https://github.com/DimWebDev/codebase-navigator-mcp",
+  "bugs": "https://github.com/DimWebDev/codebase-navigator-mcp/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DimWebDev/codebase-navigator-mcp.git"
+  },
+  "type": "module",
+  "bin": {
+    "mcp-server-code-navigator": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/*.js",
+    "prepare": "npm run build",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.1",
+    "chalk": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "shx": "^0.3.4",
+    "typescript": "^5.3.3"
+  }
+}
