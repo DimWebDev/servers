@@ -6,6 +6,8 @@ An MCP server implementation that provides comprehensive 4-phase codebase analys
 
 The Codebase Navigator automatically analyzes any software project through a structured 4-phase approach, providing developers with comprehensive insights about code structure, dependencies, architectural patterns, and onboarding recommendations.
 
+To use this tool instruct the LLM to use `analyze_codebase` or use `codebase_navigator`.
+
 
 ## 📋 Table of Contents
 
