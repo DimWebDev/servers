@@ -21,6 +21,7 @@ To use this tool instruct the LLM to use `analyze_codebase` or use `codebase_nav
 - [Usage](#usage)
 - [Configuration](#configuration)
   - [Usage with Claude Desktop](#usage-with-claude-desktop)
+  - [Usage with Claude Code](#usage-with-claude-code)
   - [Usage with VS Code](#usage-with-vs-code)
 - [License](#license)
 
@@ -194,6 +195,16 @@ Add this to your `claude_desktop_config.json`:
 
 
 To disable logging of analysis information set env var: `DISABLE_ANALYSIS_LOGGING` to `true`.
+
+### Usage with Claude Code
+
+Install and configure the Codebase Navigator with Claude Code using the MCP command:
+
+```bash
+claude mcp add codebase-navigator --scope user npx @dimwebdev/codebase_navigator
+```
+
+Once added, you can use the codebase analysis in your Claude conversations by asking Claude to analyze any project directory. The tool will automatically be available across all your Claude Code interactions.
 
 ### Usage with VS Code
 For manual installation, add the following JSON block to your User Settings (JSON) file in VS Code.
